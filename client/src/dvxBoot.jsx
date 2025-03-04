@@ -5,10 +5,15 @@ import "./Chatbot.css";
 import moment from "moment";
 import axios from 'axios';
 import parse from "html-react-parser";
-
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 const { Option } = Select;
 
+// const baseUrl = "http://localhost:5000"
+const baseUrl = "http://13.48.147.159:5000"
+
 const DvxBot = () => {
+    const {t} = useTranslation();
     const [selectedLanguage, setSelectedLanguage] = useState(null);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
@@ -81,10 +86,12 @@ const DvxBot = () => {
     // const carEngines = ["2.0L TSI", "3.0L Turbo", "V8"];
 
     useEffect(() => {
+        const langKey = localStorage.getItem("language")
+        i18n.changeLanguage(langKey)
         setMessages([
             {
                 type: "bot",
-                text: "Welcome to DVX Performance! 💨 What can we help you with today?",
+                text: t('welcome'),
                 html: true,
             },
         ]);
@@ -111,7 +118,7 @@ const DvxBot = () => {
     }, [messages]);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/cars").then((response) => {
+        axios.get(`${baseUrl}/cars`).then((response) => {
             const formattedData = formatCarData(response.data);
             setCarBrands(formattedData.carBrands);
             setCarModels(formattedData.carModels);
@@ -1050,11 +1057,11 @@ const DvxBot = () => {
         const formattedDate = moment(dateTime).format("YYYY-MM-DDTHH:mm:ssZ");
         try {
             setLoading(true)
-            axios.post("http://localhost:5000/add-event-to-calender", {
+            axios.post(`${baseUrl}/add-event-to-calender`, {
                 service: maintenanceService ? "Maintenance & Tyre Services" : "Chip Tuning & Performance Upgrades",
                 dateTime: formattedDate,
             })
-            await axios.post("http://localhost:5000/add-event-to-excel", data)
+            await axios.post(`${baseUrl}/add-event-to-excel`, data)
             setMessages([...messages, { type: "bot", text: "Your appointment has been scheduled!" }])
             setLoading(false)
             setBooking(false)
@@ -1114,14 +1121,16 @@ const DvxBot = () => {
     }
 
     const languageMap = {
-        english: 'English',
-        dutch: 'Dutch',
-        french: 'French',
+        en: 'English',
+        nl: 'Dutch',
+        fr: 'French',
     };
 
     const handleMenuClick = async (e) => {
+        i18n.changeLanguage(e.key)
         const selectedLang = { code: e.key, name: languageMap[e.key] };
         setSelectedLanguage(selectedLang);
+        localStorage.setItem("language", e.key)
     }
 
     const languageMenu = (
