@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "kinetic-wind-451413-i6",
+  "private_key_id": "06cb76b63bfb8cbbd4c31725b0d3458871f7bd26",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCulA/v2Vq1uK3H\nvZ+7bNydkmHH/zAXpXdM7tOjb+PbIZp5EgVGYsXWXiM0/5YK2vPiGTyvVR8K0qIo\nmC2sfvv0FEvdY7q/yi4zqCYWHSI6fx5Z/RrTxnBRoIfFiSy0xrq8IoX7A2BJZ2yT\ny6sw1cZle2QMa60jnKu1fNoxEMU2fns84Nv95vI63gW3sRH9i7v/arwk35tsn9wW\nQWEibVlRyswuQwoITUpTfEOXqUvivRLDnDoS4b+Hj4RErU0DwKcEkZWDh1YER7Xr\noSYOgT2froTNacPy4pKKtVXEaPgq0LF713xYuajw50EjyvoXG8ArKk2wvLN3B54z\n25KVlzhFAgMBAAECggEABGjgnvoj7KBcLpLSnKuORjvZVNghGqfNg9fDtSzxWd3X\nOgtDfAvb29aHsYhqZAUBBHGgv8kFpLW9uz34AWBsjgJcb2lcFG+18dlKEcrtZc7d\nZGaC4MO/BVpps4qlSQrjOQQiOda6MU1EewmgKsNrl7EIAOxQJ9/tBZ0mu11YerZ1\nr3UALs4nnxTkx2frw7VyJpko2AL2cS+SCz6bjRgj1lu9KE+rvvpBncyltruhLfVu\nubksLkZF1wzzdaqay4jmiTVwDco2erh3+hYzcrKGK19/BehJt3RWU6X9jkPIac32\nkJUiCAT0yBe5jocu/tEFao3M64M16DApR3oWpZUzjQKBgQDXmeaVcgIAoB0ZayLM\n2WpcFX7a7JvbYEH6aUijsks6e7C8sWt/TTg3QISk4wnV30wgSR3WZx4E2WYDu4Ts\ncfgotHDtHxs/eFBGL7RJrjaHCwWpPHVxMkFHVSdJf7jF7CaszDDfdLZiqPuzzEjZ\nLT4T4SPWE3RGl+AVtn+tLJ2lTwKBgQDPSlo+Cj/PLMCC+FnxUZgx6lZcsXGcFfPp\n9lu+oOT0C9RMKatV3ZFhIWa7CiaKtPD7BZEN7aKeDUU6eoyb3rBjgvK36hZfdPae\nAsmE3NEPDcSKMPbbENoNMtiOMV35hdXpUoIdSN/cT3NKziFs2CwC5Po1OR1GtJXg\nsYqUdSdMKwKBgQDFCKQfDarg0XLmiO+r0EIQV6CwCC5DpUuGwvMcjtOLZgDV4TrB\ng1uNuwu9+LNDXqeeldOL3n8jpV5CqPvIbjuBT64oNhZbweNy0SPtdiXk8mDBEjyu\nL2RTAXI/DFdbof6SSqWbgXkw3wfwgBBPUbZ6ynVKrkrEPQYQMdGq/KwxpwKBgEKw\n3DnLmF3yOvmoJ1/RbZLZnvFxkWizU2c5gKjjIOY3jBT47wvQHj7OvTt994p2znUk\nhFej1cbd5CD9XpGjYsKRVb/AC3Sor9OEeAtL8+LQ/iOrvzAZyt2mNzAASAjIe1r2\n1a/QS12ZHjG6Adz/66D+xFUtS/L8lJ/W3wwGaR9DAoGANQNktNaTpRZ+42GBzliI\nG8HUe9hWFK0Q5h5FCsvLiez00EGPU3nRi42RQgOdIWBHD1hjkFjc20V/g6pt1xe5\nn9lvWBFbLWQlG+f6gLUcjE9t/pWp5kJqls4jNS+vrkhelGkn9KjSHOtp5+WoYdvW\nCOx1m1QGVOLSiHsoiTHc4ro=\n-----END PRIVATE KEY-----\n",
+  "client_email": "booking-bot@kinetic-wind-451413-i6.iam.gserviceaccount.com",
+  "client_id": "103019311696720289597",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/booking-bot%40kinetic-wind-451413-i6.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
