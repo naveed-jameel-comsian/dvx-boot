@@ -865,7 +865,7 @@ const DvxBot = () => {
 
         const data = { name: name, license_plate: license }
         try {
-            const res = await axios.post("http://localhost:5000/customer", data)
+            const res = await axios.post(`${baseUrl}/customer`, data)
             setCustomerVerifyName(false)
             setCustomerVerifyLicense(false)
 
