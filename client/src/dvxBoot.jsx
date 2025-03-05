@@ -13,7 +13,7 @@ const { Option } = Select;
 const baseUrl = "http://13.48.147.159:5000"
 
 const DvxBot = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const [selectedLanguage, setSelectedLanguage] = useState(null);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
@@ -86,13 +86,16 @@ const DvxBot = () => {
     // const carEngines = ["2.0L TSI", "3.0L Turbo", "V8"];
 
     useEffect(() => {
+        const lang = navigator.language.startsWith("fr") ? "fr" : navigator.language.startsWith("nl") ? "nl" : "en";
+        console.log("lang---------", lang)
         const langKey = localStorage.getItem("language")
-        i18n.changeLanguage(langKey)
+        i18n.changeLanguage(lang)
         setMessages([
             {
                 type: "bot",
-                text: t('welcome'),
+                //text: "Welcome to DVX Performance! 💨 What can we help you with today?",
                 html: true,
+                key: "welcome"
             },
         ]);
     }, []);
@@ -104,13 +107,17 @@ const DvxBot = () => {
                     ...prevMessages,
                     {
                         type: "bot",
-                        text: "Please choose an option:",
+                        //text: "Please choose an option:",
                         html: true,
                         buttons: [
-                            "Chip Tuning & Performance Upgrades ⚡",
-                            "Maintenance & Tyre Services 🔧",
-                            "General Questions ❓",
+                            "main-btn1",
+                            "main-btn2",
+                            "main-btn3",
+                            // "Chip Tuning & Performance Upgrades ⚡",
+                            // "Maintenance & Tyre Services 🔧",
+                            // "General Questions ❓",
                         ],
+                        key: "choose-option"
                     },
                 ]);
             }, 1000);
@@ -162,7 +169,7 @@ const DvxBot = () => {
     const handleSendMessage = async (text) => {
         console.log("text---------", text)
         console.log("conversationStep---------", conversationStep)
-        const userMessage = { type: "user", text };
+        const userMessage = { type: "user", text, key: text };
         setMessages((prevMessages) => [...prevMessages, userMessage]);
 
         setIsTyping(true); // stop
@@ -171,22 +178,22 @@ const DvxBot = () => {
             switch (conversationStep) {
                 case "welcome":
                     if (
-                        text.includes("Chip Tuning") ||
-                        text.includes("Maintenance") ||
-                        text.includes("General Questions")
+                        text.includes("main-btn1") ||
+                        text.includes("main-btn2") ||
+                        text.includes("main-btn3")
                     ) {
-                        if (text.includes("General Questions")) {
+                        if (text.includes("main-btn3")) {
                             setSelectedOption(text);
                             setConversationStep("generalQuestions");
                             setGeneral(true)
                             botMessage = {
                                 type: "bot",
-                                text: "Here are some common topics:",
+                                key: "common-tips",
                                 html: true,
                                 buttons: [
-                                    "📌 Pricing for chip tuning, exhaust switches, and services",
-                                    "📌 Estimated service duration",
-                                    "📌 Contact details and workshop location",
+                                    "price",
+                                    "duration",
+                                    "contact",
                                 ],
                             };
 
@@ -195,9 +202,10 @@ const DvxBot = () => {
                             setSelectedOption(text);
                             botMessage = {
                                 type: "bot",
-                                text: "Are you an existing customer?",
+                                //text: "Are you an existing customer?",
                                 html: true,
-                                buttons: ["Yes", "No"],
+                                buttons: ["yes", "no"],
+                                key: "existing-customer"
                             };
                             setConversationStep("identifyCustomer");
                         }
@@ -213,7 +221,7 @@ const DvxBot = () => {
                     if (text.toLowerCase() === "yes") {
                         botMessage = {
                             type: "bot",
-                            text: "Great! Please enter your name.",
+                            key: "verify-name",
                             html: true,
                         };
                         setCustomerVerifyName(true)
@@ -222,47 +230,51 @@ const DvxBot = () => {
                         setIsExistingCustomer(false);
                         botMessage = {
                             type: "bot",
-                            text: "No problem! I can guide you through our services.",
+                            //text: "No problem! I can guide you through our services.",
                             html: true,
+                            key: "no-problem"
                         };
                         setMessages((prevMessages) => [...prevMessages, botMessage]);
                         setConversationStep("newCustomer");
-                        if (selectedOption.includes("Chip Tuning")) {
+                        console.log("selectedOption-------", selectedOption)
+                        if (selectedOption.includes("main-btn1")) {
                             setConversationStep("chipTuningOptions");
                             botMessage = {
                                 type: "bot",
-                                text: "We specialize in various performance upgrades. What are you looking for?",
+                                // text: "We specialize in various performance upgrades. What are you looking for?",
+                                key: "chip-option-text",
                                 html: true,
                                 buttons: [
-                                    "Chip Tuning (Stage 1-3+) 💾",
-                                    "Engine Specialized Tuning 🔧",
-                                    "Exhaust Tuning & Switches 🔥",
-                                    "Describe Your Question ❓",
+                                    "chip-option-1",
+                                    "chip-option-2",
+                                    "chip-option-3",
+                                    "chip-option-4",
                                 ],
                             };
-                        } else if (selectedOption.includes("Maintenance")) {
+                        } else if (selectedOption.includes("main-btn2")) {
                             setConversationStep("maintenanceServices");
                             botMessage = {
                                 type: "bot",
-                                text: "Here’s your past service history: [Service History]. What are you looking for today?",
+                                //text: "Here’s your past service history: [Service History]. What are you looking for today?",
+                                key: "service-option-text",
                                 html: true,
                                 buttons: [
-                                    "Oil Change 🔧",
-                                    "Brake Check & Replacement 🚨",
-                                    "Tyre Switch/Rotation & Balancing 🛞",
-                                    "Other – Describe Your Needs",
+                                    "service-option-btn1",
+                                    "service-option-btn2",
+                                    "service-option-btn3",
+                                    "service-option-btn4",
                                 ],
                             };
                         } else if (selectedOption.includes("General Questions")) {
                             setConversationStep("generalQuestions");
                             botMessage = {
                                 type: "bot",
-                                text: "Here are some common topics:",
+                                key: "common-tips",
                                 html: true,
                                 buttons: [
-                                    "📌 Pricing for chip tuning, exhaust switches, and services",
-                                    "📌 Estimated service duration",
-                                    "📌 Contact details and workshop location",
+                                    "price",
+                                    "duration",
+                                    "contact",
                                 ],
                             };
                         }
@@ -275,20 +287,7 @@ const DvxBot = () => {
                     }
                     break;
                 case "newCustomer":
-                    if (selectedOption.includes("Chip Tuning")) {
-                        setConversationStep("chipTuningOptions");
-                        botMessage = {
-                            type: "bot",
-                            text: "We specialize in various performance upgrades. What are you looking for?",
-                            html: true,
-                            buttons: [
-                                "Chip Tuning (Stage 1-3+) 💾",
-                                "Engine Specialized Tuning 🔧",
-                                "Exhaust Tuning & Switches 🔥",
-                                "Describe Your Question ❓",
-                            ],
-                        };
-                    } else if (selectedOption.includes("Maintenance")) {
+                    if (selectedOption.includes("Maintenance")) {
                         setConversationStep("maintenanceServices");
                         botMessage = {
                             type: "bot",
@@ -306,56 +305,58 @@ const DvxBot = () => {
                         setGeneral(true)
                         botMessage = {
                             type: "bot",
-                            text: "Here are some common topics:",
+                            key: "common-tips",
                             html: true,
                             buttons: [
-                                "📌 Pricing for chip tuning, exhaust switches, and services",
-                                "📌 Estimated service duration",
-                                "📌 Contact details and workshop location",
+                                "price",
+                                "duration",
+                                "contact",
                             ],
                         };
 
                     }
                     break;
                 case "chipTuningOptions":
-                    if (text.includes("Chip Tuning (Stage 1-3+)")) {
+                    if (text.includes("chip-option-1")) {
                         botMessage = {
                             type: "bot",
-                            text: "Select your car brand.",
+                            key: "select-brand",
                             html: true,
                             carSelection: true,
                             carSelectionStep: "brand",
                         };
                         setConversationStep("carSelection");
                         setSection("3A")
-                    } else if (text.includes("Engine Specialized Tuning")) {
+                    } else if (text.includes("chip-option-2")) {
                         botMessage = {
                             type: "bot",
-                            text: "Select your car brand.",
+                            key: "select-brand",
                             html: true,
                             carSelection: true,
                             carSelectionStep: "brand",
                         };
                         setConversationStep("carSelection");
                         setSection("3B")
-                    } else if (text.includes("Exhaust Tuning & Switches")) {
+                    } else if (text.includes("chip-option-3")) {
                         botMessage = {
                             type: "bot",
-                            text: "Exhaust upgrades can boost performance and sound. What are you interested in?",
+                            //text: "Exhaust upgrades can boost performance and sound. What are you interested in?",
+                            key: "chip-option-3-text",
                             html: true,
                             buttons: [
-                                "Performance Exhaust Systems 🔥",
-                                "Switchable Exhaust Valve Systems 🎶",
-                                "Custom Sound Adjustments 🎵",
-                                "Other – Describe Your Needs",
+                                "chip-option-3-btn1",
+                                "chip-option-3-btn2",
+                                "chip-option-3-btn3",
+                                "chip-option-3-btn4",
                             ],
                         };
                         setConversationStep("3C");
                         setSection("3C")
-                    } else if (text.includes("Describe Your Question")) {
+                    } else if (text.includes("chip-option-4")) {
                         botMessage = {
                             type: "bot",
-                            text: "Please describe your tuning-related question, and I’ll do my best to assist. 🤖",
+                            //text: "Please describe your tuning-related question, and I’ll do my best to assist. 🤖",
+                            key: "chip-option-4-text",
                             html: true,
                         };
                         setGeneral(true)
@@ -363,7 +364,8 @@ const DvxBot = () => {
                     } else {
                         botMessage = {
                             type: "bot",
-                            text: "Please select a valid option.",
+                            // text: "Please select a valid option.",
+                            key: "valid-option",
                             html: true,
                         };
                     }
@@ -374,7 +376,8 @@ const DvxBot = () => {
                         setCarSelectionStep("model");
                         botMessage = {
                             type: "bot",
-                            text: "Now, choose your car model:",
+                            // text: "Now, choose your car model:",
+                            key: "select-brand",
                             html: true,
                             carSelection: true,
                             carSelectionStep: "model",
@@ -384,7 +387,8 @@ const DvxBot = () => {
                         setCarSelectionStep("year");
                         botMessage = {
                             type: "bot",
-                            text: "Great! What year was your car built?",
+                            // text: "Great! What year was your car built?",
+                            key: "select-year",
                             html: true,
                             carSelection: true,
                             carSelectionStep: "year",
@@ -394,7 +398,8 @@ const DvxBot = () => {
                         setCarSelectionStep("engine");
                         botMessage = {
                             type: "bot",
-                            text: "Lastly, choose your engine type:",
+                            // text: "Lastly, choose your engine type:",
+                            key: "select-type",
                             html: true,
                             carSelection: true,
                             carSelectionStep: "engine",
@@ -404,34 +409,35 @@ const DvxBot = () => {
                         setCarSelectionStep("confirm");
                         botMessage = {
                             type: "bot",
-                            text: `Awesome! You’ve selected: ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}. Is this correct?`,
+                            // text: `Awesome! You’ve selected: ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}. Is this correct?`,
+                            text: `${t("awsome")} ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}. ${t("correct")}`,
                             html: true,
-                            buttons: ["✅ Yes", "❌ No"],
+                            buttons: ["✅yes", "❌no"],
                         };
                         setConversationStep("confirmCarSelection");
                     }
                     break;
                 case "confirmCarSelection":
-                    if (text === "✅ Yes") {
+                    if (text === "✅yes") {
                         if (section == "3A") {
                             botMessage = {
                                 type: "bot",
-                                text: `Here’s the tuning data for your ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine} 🚗⚡:`,
-
+                                text: `${t("tuining-data")} ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine} 🚗⚡:`,
                                 html: true,
-                                buttons: ["Stage 1", "Stage 2", "Stage 3"],
+                                buttons: ["stage1", "stage2", "stage3"],
                             }
                             setConversationStep("tuningOptions");
                         }
                         else if (section == "3B") {
                             botMessage = {
                                 type: "bot",
-                                text: "Engine tuning is highly customizable. What are you looking for?",
+                                // text: "Engine tuning is highly customizable. What are you looking for?",
+                                key: "3b-option-text",
                                 html: true,
                                 buttons: [
-                                    "Turbo & Boost Optimization 🚀",
-                                    "Fuel Injection & Airflow Adjustments ⛽",
-                                    "Other – Describe Your Needs ❓",
+                                    "3b-btn1",
+                                    "3b-btn2",
+                                    "3b-btn3",
                                 ],
                             };
                             setConversationStep("3B");
@@ -439,9 +445,9 @@ const DvxBot = () => {
                         else if (section == "maintenanceServices") {
                             botMessage = {
                                 type: "bot",
-                                text: "Would you like to book a service appointment? 📅",
+                                key: "book-appointment",
                                 html: true,
-                                buttons: ["Yes", "No"],
+                                buttons: ["yes", "no"],
                             }
                             setConversationStep("maintenanceServices");
                         }
@@ -454,7 +460,7 @@ const DvxBot = () => {
                         setMessages((prevMessages) => [...prevMessages, botMessage]);
                         botMessage = {
                             type: "bot",
-                            text: "Select your car brand.",
+                            key: "select-brand",
                             html: true,
                             carSelection: true,
                             carSelectionStep: "brand",
@@ -464,57 +470,51 @@ const DvxBot = () => {
                     }
                     break;
                 case "tuningOptions":
-                    if (text === "Stage 1" || text === "Stage 2" || text === "Stage 3") {
+                    if (text === "stage1" || text === "stage2" || text === "stage3") {
                         setTuningStage(text);
-                        if (text === "Stage 1") {
+                        if (text === "stage1") {
                             let botMessage2 = {
                                 type: "bot",
-                                text: `Stage 1 Tuning for ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}`,
+                                text: `${t("stage1-for")} ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}`,
                                 html: true,
                             };
                             setMessages((prevMessages) => [...prevMessages, botMessage2]);
                             botMessage = {
                                 type: "bot",
-                                text: "Would you like to book an appointment? 📅",
+                                key: "book-appointment",
                                 html: true,
-                                buttons: ["Yes", "No"],
+                                buttons: ["yes", "no"],
                             }
                             setConversationStep("3A")
-                        } else if (text === "Stage 2") {
+                        } else if (text === "stage2") {
                             let botMessage2 = {
                                 type: "bot",
-                                text: `Stage 2 Tuning for ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}`,
+                                text: `${t("stage2-for")} ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}`,
                                 html: true,
                             };
                             setMessages((prevMessages) => [...prevMessages, botMessage2]);
                             botMessage = {
                                 type: "bot",
-                                text: "Would you like to book an appointment? 📅",
+                                key: "book-appointment",
                                 html: true,
-                                buttons: ["Yes", "No"],
+                                buttons: ["yes", "no"],
                             }
                             setConversationStep("3A")
-                        } else if (text === "Stage 3") {
+                        } else if (text === "stage3") {
                             let botMessage2 = {
                                 type: "bot",
-                                text: `Stage 2 Tuning for ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}`,
+                                text: `${t("stage3-for")} ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}`,
                                 html: true,
                             };
                             setMessages((prevMessages) => [...prevMessages, botMessage2]);
                             botMessage = {
                                 type: "bot",
-                                text: "Would you like to book an appointment? 📅",
+                                key: "book-appointment",
                                 html: true,
-                                buttons: ["Yes", "No"],
+                                buttons: ["yes", "no"],
                             }
                             setConversationStep("3A")
-                            // botMessage = {
-                            //     type: "bot",
-                            //     text: `Stage 3 Tuning for ${carDetails.brand} ${carDetails.model} ${carDetails.year} ${carDetails.engine}: 
-                            //             - Price: Custom (Requires Discussion)`,
-                            //     html: true,
-                            // };
-                            // setConversationStep("pricingDiscussion");
+
                         }
                     } else {
                         botMessage = {
@@ -590,39 +590,30 @@ const DvxBot = () => {
                     }
                     break;
                 case "generalQuestions":
-                    if (
-                        text.includes(
-                            "Pricing for chip tuning, exhaust switches, and services"
-                        )
-                    ) {
-                        // Show dummy pricing and ask if the user wants to connect
+                    if (text.includes("price")) {
                         botMessage = {
                             type: "bot",
-                            text: `Here’s a rough estimate of our pricing:
-                - Chip Tuning: Starting from $500
-                - Exhaust Switches: Starting from $300
-                - General Services: Starting from $100
-          
-                For exact pricing and personalized quotes, please contact our employee. Would you like to connect with someone?`,
+                            // text: `Here’s a rough estimate of our pricing:
+                            //     - Chip Tuning: Starting from $500
+                            //     - Exhaust Switches: Starting from $300
+                            //     - General Services: Starting from $100
+                            //     For exact pricing and personalized quotes, please contact our employee. Would you like to connect with someone?`,
                             html: true,
+                            key: "price-text"
                         };
-                        //setConversationStep("contactEmployee"); // Move to the next step
-                    } else if (text.includes("Estimated service duration")) {
-                        // Handle service duration query
+                    } else if (text.includes("duration")) {
                         botMessage = {
                             type: "bot",
-                            text: "Service duration varies based on the type of service. Typically Chip Tuning: 2-4 hours xhaust Switches: 1-2 hours General Services: 1-3 hours",
                             html: true,
+                            key: "duration-text"
                         };
-                    } else if (text.includes("Contact details and workshop location")) {
-                        // Handle contact details query
+                    } else if (text.includes("contact")) {
                         botMessage = {
                             type: "bot",
-                            text: "You can find us at 📍 Address: 123 Performance Street, Tuning City 📞 Phone: +1 234 567 890  📧 Email: info@dvxperformance.com",
                             html: true,
+                            key: "contact-text"
                         };
                     } else {
-                        // Handle invalid options
                         botMessage = {
                             type: "bot",
                             text: "Please select a valid option.",
@@ -695,7 +686,8 @@ const DvxBot = () => {
                     if (text.toLowerCase() === "yes") {
                         botMessage = {
                             type: "bot",
-                            text: `Enter Your first name`,
+                            // text: `Enter Your first name`,
+                            key: "enter-first-name",
                             html: true,
                         };
                         setShowFirstName(true)
@@ -706,16 +698,17 @@ const DvxBot = () => {
                         setThirdB1(text)
                         botMessage = {
                             type: "bot",
-                            text: "Would you like to book an appointment? 📅",
+                            key: "book-appointment",
                             html: true,
-                            buttons: ["Yes", "No"],
+                            buttons: ["yes", "no"],
                         }
                     }
                     else {
                         if (text.toLowerCase() === "yes") {
                             botMessage = {
                                 type: "bot",
-                                text: `Enter Your first name`,
+                                // text: `Enter Your first name`,
+                                key: "enter-first-name",
                                 html: true,
                             };
                             setShowFirstName(true)
@@ -727,16 +720,17 @@ const DvxBot = () => {
                         setThirdC1(text)
                         botMessage = {
                             type: "bot",
-                            text: "Would you like to book an appointment? 📅",
+                            key: "book-appointment",
                             html: true,
-                            buttons: ["Yes", "No"],
+                            buttons: ["yes", "no"],
                         }
                     }
                     else {
                         if (text.toLowerCase() === "yes") {
                             botMessage = {
                                 type: "bot",
-                                text: `Enter Your first name`,
+                                // text: `Enter Your first name`,
+                                key: "enter-first-name",
                                 html: true,
                             };
                             setShowFirstName(true)
@@ -748,21 +742,21 @@ const DvxBot = () => {
                     if (!maintenanceService) {
                         console.log("text----321----", text)
                         setMaintenanceService(text)
-                        if (text.includes("Tyre Switch/Rotation & Balancing")) {
+                        if (text.includes("service-option-btn3")) {
                             botMessage = {
                                 type: "bot",
-                                text: "Type Wheel size, or type of tyres",
+                                key: "wheel-size"
                             };
                             setShowTyreType(true)
                         }
-                        else if (text.includes("Other – Describe Your Needs")) {
+                        else if (text.includes("service-option-btn4")) {
                             setGeneral(true)
                         }
                         else {
                             setMaintenanceServiceCarSelect(true)
                             botMessage = {
                                 type: "bot",
-                                text: "Select your car brand.",
+                                key: "select-brand",
                                 html: true,
                                 carSelection: true,
                                 carSelectionStep: "brand",
@@ -775,7 +769,8 @@ const DvxBot = () => {
                         if (text.toLowerCase() === "yes") {
                             botMessage = {
                                 type: "bot",
-                                text: `Enter Your first name`,
+                                // text: `Enter Your first name`,
+                                key: "enter-first-name",
                                 html: true,
                             };
                             setShowFirstName(true)
@@ -847,84 +842,79 @@ const DvxBot = () => {
     };
 
     const handleEnterName = () => {
-        setIsTyping(true);
+        const userMessage = { type: 'user', text: name };
+        setMessages((prevMessages) => [...prevMessages, userMessage])
+        setName("")
 
+        setIsTyping(true);
         setTimeout(() => {
-            const userMessage = { type: 'user', text: name };
-            setMessages((prevMessages) => [...prevMessages, userMessage]);
             setCustomerVerifyName(false)
             setCustomerVerifyLicense(true)
-            const botMessage = { type: 'bot', text: "Enter your license plate" }
+            const botMessage = { type: 'bot', key: "verify-license" }
             setMessages((prevMessages) => [...prevMessages, botMessage]);
             setIsTyping(false);
-
-
         }, 1000);
 
     }
 
     const handleEnterLicense = async () => {
-        setIsTyping(true);
+        const userMessage = { type: 'user', text: license };
+        setMessages((prevMessages) => [...prevMessages, userMessage]);
+        setLicense("")
+        setIsTyping(true)
 
-        setTimeout(() => {
-            const userMessage = { type: 'user', text: name };
-            setMessages((prevMessages) => [...prevMessages, userMessage]);
+        const data = { name: name, license_plate: license }
+        try {
+            const res = await axios.post("http://localhost:5000/customer", data)
             setCustomerVerifyName(false)
             setCustomerVerifyLicense(false)
 
+            if(res?.data?.isFound){
+                let recordFound = {
+                    type: "bot",
+                    text: `${t("history")} ${res?.data?.brand}, ${res?.data?.model}. ${t("today-looking")}`,
+                    html: true,
+                }
+                setMessages((prevMessages) => [...prevMessages, recordFound]);
+            }
 
             let botMessage;
-
-            if (selectedOption.includes("Chip Tuning")) {
+            if (selectedOption.includes("main-btn1")) {
                 setConversationStep("chipTuningOptions");
                 botMessage = {
                     type: "bot",
-                    text: "We specialize in various performance upgrades. What are you looking for?",
+                    key: "chip-option-text",
                     html: true,
                     buttons: [
-                        "Chip Tuning (Stage 1-3+) 💾",
-                        "Engine Specialized Tuning 🔧",
-                        "Exhaust Tuning & Switches 🔥",
-                        "Describe Your Question ❓",
+                        "chip-option-1",
+                        "chip-option-2",
+                        "chip-option-3",
+                        "chip-option-4",
                     ],
                 };
-            } else if (selectedOption.includes("Maintenance")) {
+            }
+            else if (selectedOption.includes("main-btn2")) {
                 setConversationStep("maintenanceServices");
                 botMessage = {
                     type: "bot",
-                    text: "Here’s your past service history: [Service History]. What are you looking for today?",
+                    key: "service-option-text",
                     html: true,
                     buttons: [
-                        "Oil Change 🔧",
-                        "Brake Check & Replacement 🚨",
-                        "Tyre Switch/Rotation & Balancing 🛞",
-                        "Other – Describe Your Needs",
-                    ],
-                };
-            } else if (selectedOption.includes("General Questions")) {
-                setConversationStep("generalQuestions");
-                botMessage = {
-                    type: "bot",
-                    text: "Here are some common topics:",
-                    html: true,
-                    buttons: [
-                        "📌 Pricing for chip tuning, exhaust switches, and services",
-                        "📌 Estimated service duration",
-                        "📌 Contact details and workshop location",
+                        "service-option-btn1",
+                        "service-option-btn2",
+                        "service-option-btn3",
+                        "service-option-btn4",
                     ],
                 };
             }
 
             setIsTyping(false);
             setMessages((prevMessages) => [...prevMessages, botMessage]);
-        }, 1000);
-
-
-        const data = {
-            name: name,
-            license_plate: license
+            
         }
-        // await axios.post("http://localhost:5000/customer", data)
+        catch (err) {
+            setIsTyping(false);
+        }
     }
 
     const handleBookFirstName = async () => {
@@ -936,7 +926,7 @@ const DvxBot = () => {
 
         setIsTyping(true)
         setTimeout(() => {
-            const botMessage = { type: 'bot', text: "Enter your last name" };
+            const botMessage = { type: 'bot', key: "enter-last-name" };
             setMessages((prevMessages) => [...prevMessages, botMessage])
             setIsTyping(false)
         }, 1000);
@@ -950,7 +940,7 @@ const DvxBot = () => {
 
         setIsTyping(true)
         setTimeout(() => {
-            const botMessage = { type: 'bot', text: "Enter phone number" };
+            const botMessage = { type: 'bot', key: "enter-phone" };
             setMessages((prevMessages) => [...prevMessages, botMessage])
             setIsTyping(false)
         }, 1000);
@@ -964,7 +954,7 @@ const DvxBot = () => {
 
         setIsTyping(true)
         setTimeout(() => {
-            const botMessage = { type: 'bot', text: "Enter license plate number" };
+            const botMessage = { type: 'bot', key: "enter-plate" };
             setMessages((prevMessages) => [...prevMessages, botMessage])
             setIsTyping(false)
         }, 1000);
@@ -978,7 +968,7 @@ const DvxBot = () => {
 
         setIsTyping(true)
         setTimeout(() => {
-            const botMessage = { type: 'bot', text: "What is the Variant or Trim of Your Vehicle?" };
+            const botMessage = { type: 'bot', key: "enter-variant" };
             setMessages((prevMessages) => [...prevMessages, botMessage])
             setIsTyping(false)
         }, 1000);
@@ -992,7 +982,7 @@ const DvxBot = () => {
 
         setIsTyping(true)
         setTimeout(() => {
-            const botMessage = { type: 'bot', text: "When Was Your Last Maintenance Date?" };
+            const botMessage = { type: 'bot', key: "enter-maint-date" };
             setMessages((prevMessages) => [...prevMessages, botMessage])
             setIsTyping(false)
         }, 1000);
@@ -1014,9 +1004,9 @@ const DvxBot = () => {
             setShowTyreType(false)
             let botMessage = {
                 type: "bot",
-                text: "Would you like to book a service appointment? 📅",
+                key: "book-appointment",
                 html: true,
-                buttons: ["Yes", "No"],
+                buttons: ["yes", "no"],
             }
             setConversationStep("maintenanceServices");
             setIsTyping(false)
@@ -1045,11 +1035,11 @@ const DvxBot = () => {
             engine: carDetails?.engine,
             manufacturing_year: carDetails?.year,
             type: type,
-            chipped: tuningStage ? "yes" : "no",
+            chipped: tuningStage ? t("yes") : t("no"),
             chip_tuning: null,
             stage: tuningStage,
             last_maintenance: lastMaintenanceDate,
-            maint_tyre_service: maintenanceService,
+            maint_tyre_service: t(maintenanceService),
             wheel_tyre_type: tyreType
         }
 
@@ -1058,16 +1048,16 @@ const DvxBot = () => {
         try {
             setLoading(true)
             axios.post(`${baseUrl}/add-event-to-calender`, {
-                service: maintenanceService ? "Maintenance & Tyre Services" : "Chip Tuning & Performance Upgrades",
+                service: maintenanceService ? t("main-btn2") : t("main-btn1"),
                 dateTime: formattedDate,
             })
             await axios.post(`${baseUrl}/add-event-to-excel`, data)
-            setMessages([...messages, { type: "bot", text: "Your appointment has been scheduled!" }])
+            setMessages([...messages, { type: "bot", key: "appoint-scheduled" }])
             setLoading(false)
             setBooking(false)
             setProcessAgain(true)
         } catch (error) {
-            setMessages([...messages, { type: "bot", text: "Failed to book appointment." }]);
+            setMessages([...messages, { type: "bot", key: "appoint-failed" }]);
         }
     }
 
@@ -1146,18 +1136,18 @@ const DvxBot = () => {
             <div className="header">
                 <div className="profile">
                     <img
-                        src="https://api.dicebear.com/7.x/miniavs/svg?seed=3"
+                        src="/logo.jpeg"
                         alt="Avatar"
                         className="avatar-image"
                     />
                     <div className="profile-text-container">
-                        <p className="chat-with-text">Chat with</p>
-                        <p className="assistant-name">Our Assistant</p>
+                        <p className="chat-with-text">{t("chat-with")}</p>
+                        <p className="assistant-name">{t("our-assistance")}</p>
                     </div>
                 </div>
                 <div className="actions">
                     <Dropdown overlay={languageMenu} trigger={['click']}>
-                        <span className="input-icon" style={{color:"white"}}>
+                        <span className="input-icon" style={{ color: "white" }}>
                             <TranslationOutlined />
                         </span>
                     </Dropdown>
@@ -1171,7 +1161,7 @@ const DvxBot = () => {
             <div className={` ${expanded ? "expanded-status" : "status-bar"}`}>
                 <div className="status">
                     <span className="status-text">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We're online
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{t("online")}
                     </span>
                 </div>
             </div>
@@ -1183,7 +1173,7 @@ const DvxBot = () => {
                     }
                     return (
                         <div key={index} className={`message ${message.type}`}>
-                            {message.html ? parse(message.text) : message.text}
+                            {message.html ? parse(message.key ? t(message.key) : message.text) : message.key ? t(message.key) : message.text}
                             {message.buttons && (
                                 <div className="button-container">
                                     {message.buttons.map((buttonText, idx) => (
@@ -1192,7 +1182,7 @@ const DvxBot = () => {
                                             className="option-button"
                                             onClick={() => handleButtonClick(buttonText, index)}
                                         >
-                                            {buttonText}
+                                            {t(buttonText)}
                                         </Button>
                                     ))}
                                 </div>
@@ -1202,7 +1192,7 @@ const DvxBot = () => {
                                     {message?.carSelectionStep === "brand" && (
                                         <Select
                                             disabled={!(index === messages?.length - 1)}
-                                            placeholder="Select Car Brand 🏎️"
+                                            placeholder={t("select-brand")}
                                             onChange={(value) => handleCarSelection(value, "brand")}
                                         >
                                             {carBrands.map((brand) => (
@@ -1215,7 +1205,7 @@ const DvxBot = () => {
                                     {message?.carSelectionStep === "model" && (
                                         <Select
                                             disabled={!(index === messages?.length - 1)}
-                                            placeholder="Select Car Model 📋"
+                                            placeholder={t("select-model")}
                                             onChange={(value) => handleCarSelection(value, "model")}
                                         >
                                             {carModels[carDetails.brand].map((model) => (
@@ -1228,7 +1218,8 @@ const DvxBot = () => {
                                     {message?.carSelectionStep === "year" && (
                                         <Select
                                             disabled={!(index === messages?.length - 1)}
-                                            placeholder="Select Year of Manufacture 📅"
+                                            placeholder={t("select-year")}
+                                            // placeholder="Select Year of Manufacture 📅"
                                             onChange={(value) => handleCarSelection(value, "year")}
                                         >
                                             {/* {carYears.map((year) => (
@@ -1246,7 +1237,8 @@ const DvxBot = () => {
                                     {message?.carSelectionStep === "engine" && (
                                         <Select
                                             disabled={!(index === messages?.length - 1)}
-                                            placeholder="Select Engine Type & Size 🔧"
+                                            placeholder={t("select-type")}
+                                            // placeholder="Select Engine Type & Size 🔧"
                                             onChange={(value) => handleCarSelection(value, "engine")}
                                         >
                                             {/* {carEngines.map((engine) => (
@@ -1282,7 +1274,7 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Enter your name"
+                            placeholder={t("type-here")}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             onPressEnter={() => handleEnterName()}
@@ -1301,7 +1293,7 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Enter license plate"
+                            placeholder={t("type-here")}
                             value={license}
                             onChange={(e) => setLicense(e.target.value)}
                             onPressEnter={() => handleEnterLicense()}
@@ -1320,7 +1312,8 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type here..."
+                            // placeholder="Type here..."
+                            placeholder={t("type-here")}
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             onPressEnter={() => handleBookFirstName()}
@@ -1338,7 +1331,8 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type here..."
+                            // placeholder="Type here..."
+                            placeholder={t("type-here")}
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                             onPressEnter={() => handleBookLastName()}
@@ -1356,7 +1350,8 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type here..."
+                            // placeholder="Type here..."
+                            placeholder={t("type-here")}
                             value={phone_number}
                             onChange={(e) => setPhone_number(e.target.value)}
                             onPressEnter={() => handleBookPhone_number()}
@@ -1374,7 +1369,8 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type here..."
+                            // placeholder="Type here..."
+                            placeholder={t("type-here")}
                             value={licensePlate}
                             onChange={(e) => setLicensePlate(e.target.value)}
                             onPressEnter={() => handleBookLicensePlate()}
@@ -1392,7 +1388,8 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type here..."
+                            // placeholder="Type here..."
+                            placeholder={t("type-here")}
                             value={type}
                             onChange={(e) => setType(e.target.value)}
                             onPressEnter={() => handleBookType()}
@@ -1410,7 +1407,8 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type here..."
+                            // placeholder="Type here..."
+                            placeholder={t("type-here")}
                             value={lastMaintenanceDate}
                             onChange={(e) => setLastMaintenanceDate(e.target.value)}
                             onPressEnter={() => handleBookLastMaintenanceDate()}
@@ -1428,7 +1426,8 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type here..."
+                            // placeholder="Type here..."
+                            placeholder={t("type-here")}
                             value={tyreType}
                             onChange={(e) => setTyreType(e.target.value)}
                             onPressEnter={() => handleSaveTyreType()}
@@ -1444,7 +1443,7 @@ const DvxBot = () => {
             {isBooking &&
                 <div className="book-section">
                     <Input
-                        placeholder="Enter Email"
+                        placeholder={t("enter-email")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         style={{ marginBottom: "10px" }}
@@ -1452,13 +1451,13 @@ const DvxBot = () => {
 
                     <DatePicker
                         showTime={{ format: 'HH:mm' }}
-                        placeholder="Select Date & Time"
+                        placeholder={t("select-date")}
                         onChange={(_, dateString) => setDateTime(dateString)}
                         style={{ width: "100%", marginTop: "10px" }}
                     />
 
                     <Button loading={loading} type="primary" onClick={handleBookAppointment} style={{ width: "100%", marginTop: "10px" }}>
-                        <SendOutlined /> Book Appointment
+                        <SendOutlined /> {t("booking-btn")}
                     </Button>
                 </div>
             }
@@ -1468,7 +1467,7 @@ const DvxBot = () => {
                     <div className="input-row">
                         <Input
                             className="input-field"
-                            placeholder="Type your message..."
+                            placeholder={t("type-msg")}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onPressEnter={() => handleGeneralQuestion(input)}
@@ -1484,7 +1483,7 @@ const DvxBot = () => {
             {processAgain &&
                 <div className="book-section">
                     <Button type="primary" onClick={handleProcessAgain} style={{ width: "100%", marginTop: "10px" }}>
-                        Process Again
+                        {t("process-btn")}
                     </Button>
                 </div>
             }

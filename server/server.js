@@ -27,28 +27,41 @@ const sheets = google.sheets({ version: "v4", auth });
 
 // Google Sheets - Check & Update Customer Info
 app.post("/customer", async (req, res) => {
-    const { name, phone, carBrand } = req.body;
+    const { name, phone, carBrand, license_plate } = req.body;
     try {
         const response = await sheets.spreadsheets.values.get({
-            spreadsheetId: SHEETS_ID,
-            range: "Customers!A:D"
+            spreadsheetId: "1sgEFsZk96TNtkr1Ml8zouW-KZtdSlhctf6P9xYunkSg",
+            range: "Sheet1!A2:O"
         });
 
         const rows = response.data.values;
-        let existingCustomer = rows.find(row => row[0] === name);
+        let existingCustomer = rows.find(row => row[2] === license_plate);
 
         if (existingCustomer) {
-            return res.json({ message: "Customer found", carBrand: existingCustomer[2], lastService: existingCustomer[3] });
+            return res.json(
+                { 
+                    isFound: true, 
+                    first_name: existingCustomer[0], 
+                    last_name: existingCustomer[1], 
+                    license_plate: existingCustomer[2], 
+                    phone_number: existingCustomer[3], 
+                    email: existingCustomer[4], 
+                    brand: existingCustomer[5], 
+                    model: existingCustomer[6], 
+                    type: existingCustomer[7], 
+                    engine: existingCustomer[8], 
+                    manufacturing_year: existingCustomer[9], 
+                    chipped: existingCustomer[10], 
+                    stage: existingCustomer[11], 
+                    last_maintenance: existingCustomer[12], 
+                    maint_tyre_service: existingCustomer[13], 
+                    wheel_tyre_type: existingCustomer[14] 
+                });
         } else {
-            await sheets.spreadsheets.values.append({
-                spreadsheetId: SHEETS_ID,
-                range: "Customers!A:D",
-                valueInputOption: "RAW",
-                resource: { values: [[name, phone, carBrand, "No history"]] }
-            });
-            return res.json({ message: "New customer added" });
+            return res.json({ isFound: false });
         }
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: error.message });
     }
 });
