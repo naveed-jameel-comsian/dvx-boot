@@ -1668,7 +1668,7 @@ const DvxBot = () => {
             <Input
               className="input-field"
               placeholder={t("type-here")}
-              value={askNumber}
+              value={askEmail}
               onChange={(e) => setAskEmail(e.target.value)}
               onPressEnter={() => handleEnterAskEmail()}
             />
