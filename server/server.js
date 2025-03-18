@@ -87,8 +87,8 @@ app.get("/services", async (req, res) => {
 app.post("/add-event-to-excel", async (req, res) => {
 
     const { first_name, last_name, phone_number, license_plate, brand,
-        email, model, type, engine, manufacturing_year, chipped,
-        chip_tuning, stage, last_maintenance, maint_tyre_service, wheel_tyre_type
+        email, model, type, engine, manufacturing_year, chipped, chip_tuning,
+        stage, last_maintenance, maint_tyre_service, wheel_tyre_type, isFollowUp
     } = req.body
 
     try {
@@ -96,6 +96,7 @@ app.post("/add-event-to-excel", async (req, res) => {
             email, brand, model, type, engine, manufacturing_year, chipped,
             stage, last_maintenance, maint_tyre_service, wheel_tyre_type
         ]
+        if(isFollowUp) data.push("Yes Follow Up")
         await sheets.spreadsheets.values.append({
             spreadsheetId: "1sgEFsZk96TNtkr1Ml8zouW-KZtdSlhctf6P9xYunkSg",
             range: "Sheet1!A:M",
@@ -109,24 +110,53 @@ app.post("/add-event-to-excel", async (req, res) => {
     }
 });
 
+app.post("/get-busy-slots", async (req, res) => {
+    try {
+        const { date } = req.body; // Expecting date in 'YYYY-MM-DD' format
+        const calendar = google.calendar({ version: "v3", auth });
+
+        const startOfDay = moment(date).startOf("day").toISOString();
+        const endOfDay = moment(date).endOf("day").toISOString();
+
+        const events = await calendar.events.list({
+            calendarId: "tailormate.ai@gmail.com",
+            timeMin: startOfDay,
+            timeMax: endOfDay,
+            singleEvents: true,
+            orderBy: "startTime",
+        });
+
+        const busySlots = events.data.items.map((event) => ({
+            start: moment(event.start.dateTime).format("HH:mm"),
+            end: moment(event.end.dateTime).format("HH:mm"),
+        }));
+
+        res.json({ busySlots });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // **Add Event to Google Calendar**
 app.post("/add-event-to-calender", async (req, res) => {
     try {
-        const { service, dateTime, duration } = req.body;
+        const { service, startDateTime, endDateTime } = req.body;
         const calendar = google.calendar({ version: "v3", auth });
 
-        const startDateTime = moment.parseZone(dateTime); // Keeps the original timezone
-        const timeZone = moment.parseZone(dateTime).format("Z");
+        const start = moment.parseZone(startDateTime); // Keeps the original timezone
+        const end = moment.parseZone(endDateTime); // Keeps the original timezone
+        const timeZone = start.format("Z");
 
-        let endDateTime = startDateTime.clone().add(60, "minutes")
-        // if(duration === "Onbekend") endDateTime = startDateTime.clone().add(60, "minutes")
-        // else endDateTime = startDateTime.clone().add(duration, "minutes")
-        
-        // summary: `Appointment for ${service}`,
+        // const startDateTime = moment.parseZone(dateTime); // Keeps the original timezone
+        // const timeZone = moment.parseZone(dateTime).format("Z");
+
+        // let endDateTime = startDateTime.clone().add(60, "minutes")
+
         const event = {
             summary: `${service}`,
-            start: { dateTime: startDateTime.format(), timeZone: timeZone },
-            end: { dateTime: endDateTime.format(), timeZone: timeZone },
+            start: { dateTime: start.format(), timeZone: timeZone },
+            end: { dateTime: end.format(), timeZone: timeZone },
         }
 
         const createdEvent = await calendar.events.insert({

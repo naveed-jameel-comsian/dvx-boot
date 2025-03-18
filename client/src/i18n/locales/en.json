@@ -73,6 +73,15 @@
     "verify-name" : "Greate! Please enter your name",
     "verify-license" : "Enter your license plate number",
     "history" : "Here’s your past service history:",
-    "today-looking" : "What are you looking for today?"
+    "today-looking" : "What are you looking for today?",
+    "cust-detail-msg":"Great choice! We’ll need to discuss the best setup for your car. You can either contact us or request a callback from our tuning expert",
+    "req-call":"Request a Callback 📞",
+    "req-email":"Prefer Email Instead? ✉️",
+    "not-ready":"❌ Not Ready Yet?",
+    "ask-number" : "Please provide your phone number 📲",
+    "ask-email" : "Please provide your email ✉️",
+    "ask-thank": "Thanks! Our expert will reach out to you soon. ✅",
+    "no-worries" : "No worries! If you have any other questions, feel free to ask, or visit our shop when you're ready. 🚗💨",
+    "service_title_chip" : "Chip Tuning Stage 1"
 
 }

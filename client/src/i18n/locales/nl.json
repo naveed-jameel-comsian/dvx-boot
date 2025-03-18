@@ -73,8 +73,14 @@
     "verify-name" : "Geweldig! Voer uw naam in",
     "verify-license" : "Vul uw kenteken in",
     "history" : "Dit is uw onderhoudsgeschiedenis uit het verleden:",
-    "today-looking" : "Wat zoek je vandaag?"
-
-
+    "today-looking" : "Wat zoek je vandaag?",
+    "cust-detail-msg":"Goede keuze!, we moeten de beste setup voor uw auto bespreken. U kunt contact met ons opnemen of een terugbelverzoek indienen bij onze tuning-expert",
+    "req-call":"Vraag om een ​​terugbelverzoek 📞",
+    "req-email":"Liever e-mail? ✉️",
+    "not-ready":"❌ Nog niet klaar?",
+    "ask-number" : "Geef uw telefoonnummer 📲 op, dan belt onze specialist u binnenkort terug",
+    "ask-thank": "Bedankt! Onze expert neemt binnenkort contact met u op. ✅",
+    "no-worries" : "Geen zorgen! Als je nog andere vragen hebt, stel ze gerust, of bezoek onze winkel wanneer je er klaar voor bent. 🚗💨",
+    "service_title_chip" : "Chiptuning Fase 1"
 
 }

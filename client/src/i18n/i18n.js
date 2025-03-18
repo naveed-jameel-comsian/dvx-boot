@@ -15,8 +15,8 @@ i18n
   .use(LanguageDetector)
   .init({
     resources,
-    lng: localStorage.getItem("language") || "en", // Default before fetching
-    fallbackLng: "en",
+    lng: localStorage.getItem("language") || "nl", // Default before fetching
+    fallbackLng: "nl",
     defaultNS: 'translations',
     keySeparator: '.',
     interpolation: { escapeValue: false },

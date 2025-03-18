@@ -62,7 +62,7 @@
 }
 
 .header {
-  background: linear-gradient(135deg, #2A91F4, #2653D4);
+  background: black;
   color: white;
   padding: 10px;
   display: flex;
@@ -107,7 +107,8 @@
   font-size: 12px;
   color: #f3f3f3;
   height: 40px;
-  background: linear-gradient(135deg, #2696ff, #2654d4);
+  background: black;
+  /* background: linear-gradient(135deg, #2696ff, #2654d4); */
   /* Match the header gradient */
   z-index: 1;
 }
@@ -173,12 +174,12 @@
 }
 
 .message.bot {
-  background-color: #ffffff;
+  background-color: darkgrey;
   border: 1px solid #e0e0e0;
   align-self: flex-start;
   text-align: left;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-  color: rgb(34, 32, 32);
+  color: white;
 }
 
 .message.bot:before {
@@ -214,9 +215,10 @@
 .typing-indicator .dot {
   width: 8px;
   height: 8px;
-  background-color: #b0b0b0;
+  background-color: white;
   border-radius: 50%;
   animation: typing 1.2s infinite ease-in-out;
+
 }
 
 .typing-indicator .dot:nth-child(2) {
@@ -380,4 +382,9 @@
   .ant-select-selection-wrap{
     width: unset;
   }
+}
+
+.option-button{
+  background-color: darkgray;
+  color: white;
 }

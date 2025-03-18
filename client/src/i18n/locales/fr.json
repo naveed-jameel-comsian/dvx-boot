@@ -73,11 +73,14 @@
     "verify-name" : "Geweldig! Voer uw naam in",
     "verify-license" : "Vul uw kenteken in",
     "history" : "Voici votre historique de services passés :",
-    "today-looking" : "Que cherches-tu aujourd’hui ?"
-
-
-
-
-
+    "today-looking" : "Que cherches-tu aujourd’hui ?",
+    "cust-detail-msg":"Excellent choix ! Nous discuterons de la configuration la plus adaptée à votre voiture. Vous pouvez nous contacter ou demander à être rappelé par notre expert en tuning.",
+    "req-call":"Demander un rappel 📞",
+    "req-email":"Vous préférez le courrier électronique ? ✉️",
+    "not-ready":"❌ Pas encore prêt ?",
+    "ask-number" : "Veuillez fournir votre numéro de téléphone 📲, et notre spécialiste vous appellera sous peu",
+    "ask-thank": "Merci ! Notre expert vous contactera prochainement. ✅",
+    "no-worries" : "Pas de soucis ! Si vous avez d'autres questions, n'hésitez pas à les poser ou à venir nous rendre visite en boutique dès que vous le souhaitez. 🚗💨",
+    "service_title_chip" : "Chip Tuning Étape 1"
 
 }
